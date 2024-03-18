@@ -1,0 +1,37 @@
+name: Minify JSON Files
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '*.json'
+      - '!*.min.json'
+  workflow_dispatch:
+
+jobs:
+  minify:
+    name: Minify
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone Repo
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Minify Keys
+        uses: StefanEnsmann/Minify-JSON-Action@1.1.0
+        with:
+          input_file: keys.json
+          output_file: keys.min.json
+
+      - name: Minify Galleries
+        uses: StefanEnsmann/Minify-JSON-Action@1.1.0
+        with:
+          input_file: galleries.json
+          output_file: galleries.min.json
+
+      - name: Commit
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Auto-Generate Minified Files
