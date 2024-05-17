@@ -1,0 +1,26 @@
+name: Prepare files
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "*.json"
+      - "!*.min.json"
+  workflow_dispatch:
+
+jobs:
+  prepare:
+    name: Prepare files
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Process files
+        uses: ./.github/actions/prepare
+      - name: Commit
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Prepared files
